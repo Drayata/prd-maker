@@ -67,6 +67,12 @@ export const en: Record<keyof typeof id, string> = {
   'providers.error.json': 'Advanced JSON is invalid.',
   'providers.error.action': 'Action failed.',
   'providers.action.success': 'Action completed.',
+  'providers.models.loaded': 'Model list loaded.',
+  'providers.models.empty': 'Provider returned no models.',
+  'providers.duplicate.success': 'Provider duplicated.',
+  'providers.delete.success': 'Provider deleted.',
+  'providers.localhost.warning':
+    'Inside Docker, localhost points to the API container. Use host.docker.internal with the same port, for example http://host.docker.internal:20128/v1.',
   'settings.eyebrow': 'Account',
   'settings.title': 'Profile settings',
   'settings.saved': 'Profile saved.',

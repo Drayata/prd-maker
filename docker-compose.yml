@@ -40,6 +40,8 @@ services:
         '-c',
         'node apps/api/dist/db/migrate.js && node apps/api/dist/db/seed.js && node apps/api/dist/server.js',
       ]
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     ports:
       - '4000:4000'
     depends_on:

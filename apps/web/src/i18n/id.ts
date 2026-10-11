@@ -65,6 +65,12 @@ export const id = {
   'providers.error.json': 'JSON lanjutan tidak valid.',
   'providers.error.action': 'Aksi gagal.',
   'providers.action.success': 'Aksi berhasil.',
+  'providers.models.loaded': 'Daftar model berhasil dimuat.',
+  'providers.models.empty': 'Provider tidak mengembalikan daftar model.',
+  'providers.duplicate.success': 'Provider berhasil diduplikat.',
+  'providers.delete.success': 'Provider berhasil dihapus.',
+  'providers.localhost.warning':
+    'Dalam Docker, localhost menunjuk container API. Gunakan host.docker.internal dengan port yang sama, misalnya http://host.docker.internal:20128/v1.',
   'settings.eyebrow': 'Akun',
   'settings.title': 'Pengaturan profil',
   'settings.saved': 'Profil berhasil disimpan.',

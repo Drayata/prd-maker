@@ -94,21 +94,58 @@ export default function ProvidersPage() {
       setBusy(false);
     }
   }
-  async function action(path: string, method = 'POST', provider?: Provider) {
+  function actionError(cause: unknown) {
+    setError(cause instanceof ApiError ? cause.message : t('providers.error.action'));
+  }
+  async function testConnection(provider: Provider) {
     setError('');
     setMessage('');
     try {
-      const result = await api<{ ok?: boolean; message?: string; models?: string[] }>(path, {
-        method,
-      });
-      if (result.models) {
-        if (provider) open(provider);
-        setModels(result.models);
+      const result = await api<{ ok: boolean; message: string; latencyMs: number }>(
+        `/providers/${provider.id}/test`,
+        { method: 'POST' },
+      );
+      if (!result.ok) {
+        setError(`${result.message} (${result.latencyMs} ms)`);
+        return;
       }
-      setMessage(result.message ?? t('providers.action.success'));
-      await load();
+      setMessage(`${result.message} (${result.latencyMs} ms)`);
     } catch (cause) {
-      setError(cause instanceof ApiError ? cause.message : t('providers.error.action'));
+      actionError(cause);
+    }
+  }
+  async function getModels(provider: Provider) {
+    setError('');
+    setMessage('');
+    try {
+      const result = await api<{ models: string[] }>(`/providers/${provider.id}/models`);
+      open(provider);
+      setModels(result.models);
+      setMessage(result.models.length ? t('providers.models.loaded') : t('providers.models.empty'));
+    } catch (cause) {
+      actionError(cause);
+    }
+  }
+  async function duplicateProvider(provider: Provider) {
+    setError('');
+    setMessage('');
+    try {
+      await api(`/providers/${provider.id}/duplicate`, { method: 'POST' });
+      await load();
+      setMessage(t('providers.duplicate.success'));
+    } catch (cause) {
+      actionError(cause);
+    }
+  }
+  async function deleteProvider(provider: Provider) {
+    setError('');
+    setMessage('');
+    try {
+      await api<void>(`/providers/${provider.id}`, { method: 'DELETE' });
+      await load();
+      setMessage(t('providers.delete.success'));
+    } catch (cause) {
+      actionError(cause);
     }
   }
   return (
@@ -182,20 +219,20 @@ export default function ProvidersPage() {
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <button
-                  onClick={() => void action(`/providers/${provider.id}/test`)}
+                  onClick={() => void testConnection(provider)}
                   className="flex items-center gap-1.5 rounded-md border px-3 py-2 text-xs"
                 >
                   <PlugZap size={14} />
                   Tes koneksi
                 </button>
                 <button
-                  onClick={() => void action(`/providers/${provider.id}/models`, 'GET', provider)}
+                  onClick={() => void getModels(provider)}
                   className="rounded-md border px-3 py-2 text-xs"
                 >
                   Ambil model
                 </button>
                 <button
-                  onClick={() => void action(`/providers/${provider.id}/duplicate`)}
+                  onClick={() => void duplicateProvider(provider)}
                   aria-label="Duplikat"
                   className="rounded-md border p-2"
                 >
@@ -203,8 +240,7 @@ export default function ProvidersPage() {
                 </button>
                 <button
                   onClick={() => {
-                    if (confirm('Hapus provider ini?'))
-                      void action(`/providers/${provider.id}`, 'DELETE');
+                    if (confirm('Hapus provider ini?')) void deleteProvider(provider);
                   }}
                   aria-label="Hapus"
                   className="rounded-md border p-2 text-red-700"
@@ -290,6 +326,11 @@ export default function ProvidersPage() {
                 value={form.baseUrl}
                 onChange={(baseUrl) => setForm({ ...form, baseUrl })}
               />
+              {/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(form.baseUrl) && (
+                <p className="mt-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+                  {t('providers.localhost.warning')}
+                </p>
+              )}
             </div>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <Input
