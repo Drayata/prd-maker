@@ -37,9 +37,15 @@ export interface ProviderConfig {
   baseUrl: string;
   apiKey?: string;
   defaultModel: string;
-  customHeaders?: Record<string, string>;
-  extraBodyParams?: Record<string, unknown>;
-  defaultParams?: { temperature?: number; maxTokens?: number; topP?: number };
+  customHeaders?: Record<string, string> | undefined;
+  extraBodyParams?: Record<string, unknown> | undefined;
+  defaultParams?:
+    | {
+        temperature?: number | undefined;
+        maxTokens?: number | undefined;
+        topP?: number | undefined;
+      }
+    | undefined;
   timeoutMs: number;
   supportsJsonMode?: boolean;
 }
