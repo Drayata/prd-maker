@@ -1,6 +1,6 @@
 import { FileText, LogOut, Moon, Settings, Sun, Waypoints } from 'lucide-react';
 import { useEffect } from 'react';
-import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { APP_NAME } from '../../config';
 import { t } from '../../i18n';
 import { api } from '../../lib/api';
@@ -75,27 +75,46 @@ export default function AppLayout() {
       <div className="mx-auto grid max-w-7xl md:grid-cols-[14rem_1fr]">
         <aside className="hidden min-h-[calc(100vh-4rem)] border-r border-neutral-200 p-4 md:block dark:border-neutral-800">
           <nav className="space-y-1">
-            <Link
-              className="flex items-center gap-3 rounded-md bg-neutral-100 px-3 py-2 text-sm dark:bg-neutral-900"
+            <NavLink
+              end
               to="/app"
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                  isActive
+                    ? 'bg-neutral-100 font-medium text-neutral-950 dark:bg-neutral-900 dark:text-white'
+                    : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950 dark:hover:bg-neutral-900 dark:hover:text-white'
+                }`
+              }
             >
               <FileText size={17} />
               {t('app.documents')}
-            </Link>
-            <Link
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            </NavLink>
+            <NavLink
               to="/app/providers"
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                  isActive
+                    ? 'bg-neutral-100 font-medium text-neutral-950 dark:bg-neutral-900 dark:text-white'
+                    : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950 dark:hover:bg-neutral-900 dark:hover:text-white'
+                }`
+              }
             >
               <Waypoints size={17} />
               {t('app.providers')}
-            </Link>
-            <Link
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            </NavLink>
+            <NavLink
               to="/app/settings"
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                  isActive
+                    ? 'bg-neutral-100 font-medium text-neutral-950 dark:bg-neutral-900 dark:text-white'
+                    : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950 dark:hover:bg-neutral-900 dark:hover:text-white'
+                }`
+              }
             >
               <Settings size={17} />
               {t('app.settings')}
-            </Link>
+            </NavLink>
           </nav>
         </aside>
         <main className="p-5 sm:p-8">
