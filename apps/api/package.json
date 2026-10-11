@@ -1,0 +1,40 @@
+{
+  "name": "@prdforge/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:seed": "tsx src/db/seed.ts"
+  },
+  "dependencies": {
+    "@prdforge/shared": "0.1.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "2.8.5",
+    "dotenv": "17.2.3",
+    "drizzle-orm": "^0.45.4",
+    "express": "5.1.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.5",
+    "pino": "10.1.0",
+    "pino-http": "11.0.0",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/supertest": "6.0.3",
+    "supertest": "7.1.4"
+  }
+}

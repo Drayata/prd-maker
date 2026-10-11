@@ -1,0 +1,35 @@
+{
+  "name": "prdforge",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,white \"npm run dev -w @prdforge/api\" \"npm run dev -w @prdforge/web\"",
+    "build": "npm run build -w @prdforge/shared && npm run build -w @prdforge/api && npm run build -w @prdforge/web",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "npm run typecheck -ws --if-present",
+    "test": "npm run test -ws --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "gen:secrets": "tsx scripts/gen-secrets.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.37.0",
+    "concurrently": "^9.2.5",
+    "eslint": "9.37.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "16.4.0",
+    "prettier": "3.6.2",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
+  }
+}
