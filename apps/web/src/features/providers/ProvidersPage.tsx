@@ -1,6 +1,6 @@
 import { Copy, PlugZap, Plus, Server, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { providerPresets, type ProviderInput, type ProviderType } from '@prdforge/shared';
+import { providerPresets, type ProviderInput } from '@prdforge/shared';
 import { t } from '../../i18n';
 import { api, ApiError } from '../../lib/api';
 
@@ -221,13 +221,13 @@ export default function ProvidersPage() {
           role="dialog"
           aria-modal="true"
           aria-label="Form provider"
-          className="fixed inset-0 z-50 overflow-y-auto bg-black/40 p-4"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-3 sm:p-6"
         >
           <form
             onSubmit={(event) => void save(event)}
-            className="mx-auto my-8 max-w-2xl rounded-lg bg-white p-6 text-neutral-950 dark:bg-neutral-950 dark:text-white"
+            className="max-h-[calc(100dvh-1.5rem)] w-full max-w-2xl overflow-y-auto rounded-lg bg-white px-6 text-neutral-950 shadow-xl sm:max-h-[calc(100dvh-3rem)] dark:bg-neutral-950 dark:text-white"
           >
-            <div className="flex justify-between">
+            <div className="sticky top-0 z-10 -mx-6 flex justify-between border-b border-neutral-200 bg-white px-6 py-5 dark:border-neutral-800 dark:bg-neutral-950">
               <h2 className="text-xl font-semibold">
                 {editing ? 'Ubah provider' : 'Tambah provider'}
               </h2>
@@ -237,7 +237,7 @@ export default function ProvidersPage() {
             </div>
             <fieldset className="mt-6">
               <legend className="text-sm">Preset</legend>
-              <div className="mt-2 grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
+              <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {providerPresets.map((item) => (
                   <button
                     key={item.id}
@@ -261,22 +261,28 @@ export default function ProvidersPage() {
                 value={form.name}
                 onChange={(name) => setForm({ ...form, name })}
               />
-              <label className="text-sm">
-                Tipe
-                <select
-                  className="input"
-                  value={form.type}
-                  onChange={(event) =>
-                    setForm({ ...form, type: event.target.value as ProviderType })
-                  }
-                >
-                  {['openai_compatible', 'anthropic', 'google_gemini', 'ollama_native'].map(
-                    (type) => (
-                      <option key={type}>{type}</option>
-                    ),
-                  )}
-                </select>
-              </label>
+              <fieldset>
+                <legend className="text-sm">Tipe</legend>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {(
+                    ['openai_compatible', 'anthropic', 'google_gemini', 'ollama_native'] as const
+                  ).map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      aria-pressed={form.type === type}
+                      onClick={() => setForm({ ...form, type })}
+                      className={`rounded-md border px-3 py-2.5 text-left text-xs transition-colors ${
+                        form.type === type
+                          ? 'border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-black'
+                          : 'border-neutral-300 hover:border-neutral-500 dark:border-neutral-700 dark:hover:border-neutral-500'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
             </div>
             <div className="mt-4">
               <Input
@@ -298,6 +304,7 @@ export default function ProvidersPage() {
                     : 'API key (opsional untuk lokal)'
                 }
                 type="password"
+                required={false}
                 value={form.apiKey ?? ''}
                 onChange={(apiKey) => setForm({ ...form, apiKey })}
               />
@@ -330,20 +337,27 @@ export default function ProvidersPage() {
               </label>
             </details>
             {models.length > 0 && (
-              <label className="mt-5 block text-sm">
-                Model tersedia
-                <select
-                  className="input"
-                  onChange={(event) => setForm({ ...form, defaultModel: event.target.value })}
-                >
-                  <option value="">Pilih model</option>
+              <fieldset className="mt-5">
+                <legend className="text-sm">Model tersedia</legend>
+                <div className="mt-2 max-h-40 space-y-1 overflow-y-auto rounded-md border border-neutral-300 p-1 dark:border-neutral-700">
                   {models.map((model) => (
-                    <option key={model}>{model}</option>
+                    <button
+                      key={model}
+                      type="button"
+                      onClick={() => setForm({ ...form, defaultModel: model })}
+                      className={`block w-full rounded px-3 py-2 text-left font-mono text-xs ${
+                        form.defaultModel === model
+                          ? 'bg-neutral-950 text-white dark:bg-white dark:text-black'
+                          : 'hover:bg-neutral-100 dark:hover:bg-neutral-900'
+                      }`}
+                    >
+                      {model}
+                    </button>
                   ))}
-                </select>
-              </label>
+                </div>
+              </fieldset>
             )}
-            <div className="mt-7 flex justify-end gap-3">
+            <div className="sticky bottom-0 -mx-6 mt-7 flex justify-end gap-3 border-t border-neutral-200 bg-white px-6 py-5 dark:border-neutral-800 dark:bg-neutral-950">
               <button
                 type="button"
                 onClick={() => setEditing(undefined)}
@@ -369,17 +383,19 @@ function Input({
   value,
   onChange,
   type = 'text',
+  required = true,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   type?: string;
+  required?: boolean;
 }) {
   return (
     <label className="block text-sm">
       {label}
       <input
-        required={label !== 'API key (opsional untuk lokal)'}
+        required={required}
         className="input"
         type={type}
         value={value}
