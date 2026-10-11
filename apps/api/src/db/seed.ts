@@ -9,34 +9,7 @@ import { templates, users } from './schema.js';
 if (env.NODE_ENV === 'production')
   throw new Error('Seed tidak boleh dijalankan pada NODE_ENV=production.');
 
-const systemTemplates = [
-  ...builtInTemplates,
-  {
-    id: 'standard',
-    name: 'Standar',
-    description: 'PRD lengkap untuk kebanyakan produk.',
-    sections: [],
-  },
-  {
-    id: 'startup-mvp',
-    name: 'Startup/MVP',
-    description: 'Fokus hipotesis, validasi, dan traction.',
-    sections: [],
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    description: 'Keamanan, kepatuhan, SLA, dan rollout.',
-    sections: [],
-  },
-  {
-    id: 'feature',
-    name: 'Fitur Tambahan',
-    description: 'Perubahan dalam sistem yang sudah ada.',
-    sections: [],
-  },
-  { id: 'custom', name: 'Custom', description: 'Susun bagian PRD sendiri.', sections: [] },
-];
+const systemTemplates = builtInTemplates;
 
 for (const template of systemTemplates) {
   const hash = createHash('sha256').update(`prdforge-template:${template.id}`).digest('hex');
@@ -48,6 +21,7 @@ for (const template of systemTemplates) {
       userId: null,
       name: template.name,
       description: template.description,
+      depthDefault: template.depthDefault,
       isSystem: true,
       sectionsJson: template.sections,
     })
@@ -55,6 +29,7 @@ for (const template of systemTemplates) {
       set: {
         name: template.name,
         description: template.description,
+        depthDefault: template.depthDefault,
         sectionsJson: template.sections,
       },
     });
