@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import { builtInTemplates } from '@prdforge/shared';
 import { env } from '../config/env.js';
@@ -39,7 +39,8 @@ const systemTemplates = [
 ];
 
 for (const template of systemTemplates) {
-  const id = `00000000-0000-4000-8000-${template.id.padEnd(12, '0').slice(0, 12)}`;
+  const hash = createHash('sha256').update(`prdforge-template:${template.id}`).digest('hex');
+  const id = `${hash.slice(0, 8)}-${hash.slice(8, 12)}-4${hash.slice(13, 16)}-8${hash.slice(17, 20)}-${hash.slice(20, 32)}`;
   await db
     .insert(templates)
     .values({

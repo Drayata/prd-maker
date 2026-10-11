@@ -31,8 +31,15 @@ services:
       dockerfile: apps/api/Dockerfile
     env_file: .env
     environment:
+      NODE_ENV: development
       DATABASE_URL: mysql://prdforge:${MYSQL_PASSWORD:-prdforge_dev}@mysql:3306/prdforge
       WEB_ORIGIN: http://localhost:5173
+    command:
+      [
+        'sh',
+        '-c',
+        'node apps/api/dist/db/migrate.js && node apps/api/dist/db/seed.js && node apps/api/dist/server.js',
+      ]
     ports:
       - '4000:4000'
     depends_on:
