@@ -20,7 +20,7 @@ export function createGenerateRouter() {
     res.setHeader('X-Accel-Buffering', 'no');
     res.flushHeaders();
     const controller = new AbortController();
-    req.on('close', () => controller.abort());
+    res.on('close', () => controller.abort());
     const emit = (event: string, data: unknown) =>
       res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
     const heartbeat = setInterval(() => res.write(':ping\n\n'), 15000);

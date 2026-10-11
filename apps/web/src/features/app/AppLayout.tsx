@@ -138,6 +138,12 @@ export function DashboardPage() {
         <FileText className="mx-auto text-neutral-400" />
         <h2 className="mt-4 font-medium">{t('app.empty.title')}</h2>
         <p className="mt-2 text-sm text-neutral-500">{t('app.empty.body')}</p>
+        <Link
+          to="/app/new"
+          className="mt-5 inline-block rounded-md bg-neutral-950 px-4 py-2.5 text-sm text-white dark:bg-white dark:text-black"
+        >
+          Buat PRD baru
+        </Link>
       </div>
     </section>
   );
