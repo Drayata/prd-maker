@@ -180,6 +180,9 @@ export const providerService = {
       isDefault: false,
     });
   },
+  async adapter(userId: string, id: string) {
+    return createProvider(config(await owned(userId, id)));
+  },
   async test(userId: string, id: string) {
     return createProvider(config(await owned(userId, id))).testConnection();
   },

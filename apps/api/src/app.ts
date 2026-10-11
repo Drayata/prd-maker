@@ -12,6 +12,9 @@ import { logger } from './lib/logger.js';
 import { createAuthRouter } from './modules/auth/routes.js';
 import type { AuthService } from './modules/auth/service.js';
 import { createProvidersRouter } from './modules/providers/routes.js';
+import { createTemplatesRouter } from './modules/templates/routes.js';
+import { createDocumentsRouter } from './modules/documents/routes.js';
+import { createGenerateRouter } from './modules/generate/routes.js';
 
 export function createApp(dependencies?: { authService?: AuthService }) {
   const app = express();
@@ -34,6 +37,9 @@ export function createApp(dependencies?: { authService?: AuthService }) {
   });
   app.use(`${API_PREFIX}/auth`, createAuthRouter(dependencies?.authService));
   app.use(`${API_PREFIX}/providers`, createProvidersRouter());
+  app.use(`${API_PREFIX}/templates`, createTemplatesRouter());
+  app.use(`${API_PREFIX}/documents`, createDocumentsRouter());
+  app.use(`${API_PREFIX}/generate`, createGenerateRouter());
   app.use((_request, response) =>
     response
       .status(404)
