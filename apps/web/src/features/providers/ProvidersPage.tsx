@@ -1,6 +1,6 @@
 import { Copy, PlugZap, Plus, Server, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import type { ProviderInput, ProviderPreset, ProviderType } from '@prdforge/shared';
+import { providerPresets, type ProviderInput, type ProviderType } from '@prdforge/shared';
 import { t } from '../../i18n';
 import { api, ApiError } from '../../lib/api';
 
@@ -30,7 +30,6 @@ const empty: ProviderInput = {
 };
 export default function ProvidersPage() {
   const [providers, setProviders] = useState<Provider[]>([]);
-  const [presets, setPresets] = useState<readonly ProviderPreset[]>([]);
   const [editing, setEditing] = useState<Provider | null | undefined>();
   const [form, setForm] = useState<ProviderInput>(empty);
   const [headersJson, setHeadersJson] = useState('{}');
@@ -40,12 +39,8 @@ export default function ProvidersPage() {
   const [busy, setBusy] = useState(false);
   const [models, setModels] = useState<string[]>([]);
   async function load() {
-    const [list, presetList] = await Promise.all([
-      api<{ providers: Provider[] }>('/providers'),
-      api<{ presets: readonly ProviderPreset[] }>('/providers/presets'),
-    ]);
+    const list = await api<{ providers: Provider[] }>('/providers');
     setProviders(list.providers);
-    setPresets(presetList.presets);
   }
   useEffect(() => {
     void load().catch((cause) =>
@@ -62,7 +57,7 @@ export default function ProvidersPage() {
     setMessage('');
   }
   function preset(id: string) {
-    const value = presets.find((item) => item.id === id);
+    const value = providerPresets.find((item) => item.id === id);
     if (value)
       setForm((current) => ({
         ...current,
@@ -240,17 +235,26 @@ export default function ProvidersPage() {
                 <X />
               </button>
             </div>
-            <label className="mt-6 block text-sm">
-              Preset
-              <select onChange={(event) => preset(event.target.value)} className="input">
-                <option value="">Pilih preset</option>
-                {presets.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
+            <fieldset className="mt-6">
+              <legend className="text-sm">Preset</legend>
+              <div className="mt-2 grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
+                {providerPresets.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => preset(item.id)}
+                    className="rounded-md border border-neutral-300 px-3 py-2 text-left text-xs hover:border-neutral-950 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-white dark:hover:bg-neutral-900"
+                  >
+                    <span className="block font-medium">{item.name}</span>
+                    {item.exampleModel && (
+                      <span className="mt-1 block truncate font-mono text-[10px] text-neutral-500">
+                        {item.exampleModel}
+                      </span>
+                    )}
+                  </button>
                 ))}
-              </select>
-            </label>
+              </div>
+            </fieldset>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <Input
                 label="Nama"
