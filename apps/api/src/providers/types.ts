@@ -13,14 +13,18 @@ export interface GenerateOptions {
 }
 export interface GenerateResult {
   text: string;
-  usage?: { promptTokens?: number; completionTokens?: number; totalTokens?: number };
-  finishReason?: string;
+  usage?: {
+    promptTokens?: number | undefined;
+    completionTokens?: number | undefined;
+    totalTokens?: number | undefined;
+  };
+  finishReason?: string | undefined;
   raw?: unknown;
 }
 export interface StreamChunk {
   delta: string;
-  done?: boolean;
-  usage?: GenerateResult['usage'];
+  done?: boolean | undefined;
+  usage?: GenerateResult['usage'] | undefined;
 }
 export interface LLMProvider {
   generate(messages: ChatMessage[], opts: GenerateOptions): Promise<GenerateResult>;
