@@ -1,4 +1,4 @@
-import { FileText, LogOut, Moon, Settings, Sun } from 'lucide-react';
+import { FileText, LogOut, Moon, Settings, Sun, Waypoints } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { APP_NAME } from '../../config';
@@ -81,6 +81,13 @@ export default function AppLayout() {
             >
               <FileText size={17} />
               {t('app.documents')}
+            </Link>
+            <Link
+              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-900"
+              to="/app/providers"
+            >
+              <Waypoints size={17} />
+              {t('app.providers')}
             </Link>
             <Link
               className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-900"

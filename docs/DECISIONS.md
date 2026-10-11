@@ -36,6 +36,10 @@ Akun memakai soft delete agar audit metadata tetap konsisten, tetapi email, nama
 
 Schema tetap didefinisikan dengan Drizzle. Migrasi berupa SQL eksplisit dan runner mysql2 berjurnal checksum. Drizzle Kit 0.31.11 dihapus karena keliru meminta versi ORM lebih baru meski 0.45.4 merupakan versi registry terbaru dan membawa advisory transitif pada esbuild. Runner menolak migrasi yang berubah setelah diterapkan.
 
+## 2026-10-11 - Transport provider native
+
+Adapter LLM memakai `fetch`, `AbortSignal`, Web Streams, DNS, dan crypto bawaan Node.js 20. Tidak ada dependency HTTP tambahan. Redirect dimatikan, DNS divalidasi ulang sebelum setiap request, retry hanya untuk error sementara, dan timeout diteruskan melalui AbortSignal.
+
 ## 2026-10-11 - Dependensi besar
 
 TanStack Query menangani cache server; Zustand khusus preferensi UI; Drizzle menangani SQL bertipe; CodeMirror dipilih pada Fase 4 karena lebih ringan dari Monaco; Playwright dan docx baru dipasang saat Fase 5 agar fondasi tidak membawa dependensi belum terpakai.

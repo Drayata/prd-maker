@@ -17,6 +17,7 @@ const ProtectedRoute = lazy(() =>
   import('./features/app/AppLayout').then((module) => ({ default: module.ProtectedRoute })),
 );
 const SettingsPage = lazy(() => import('./features/app/SettingsPage'));
+const ProvidersPage = lazy(() => import('./features/providers/ProvidersPage'));
 const router = createBrowserRouter([
   { path: '/', element: <LandingPage /> },
   { path: '/masuk', element: <AuthPage mode="login" /> },
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <DashboardPage /> },
           { path: 'settings', element: <SettingsPage /> },
+          { path: 'providers', element: <ProvidersPage /> },
         ],
       },
     ],
